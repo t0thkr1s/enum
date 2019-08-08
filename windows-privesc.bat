@@ -1,6 +1,7 @@
-:: Name:     windows-privesc.bat
-:: Purpose:  Prints essential information for identifying privilege escalation vectors on Windows.
-:: Author:   https://github.com/t0thkr1s
+:: Script       : windows-privesc.bat
+:: Description  : Batch script for local enumeration on Windows.
+:: Author:      : Kristof Toth - https://github.com/t0thkr1s
+:: Version      : 1.0
 
 @echo off
 
