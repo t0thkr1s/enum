@@ -1,10 +1,9 @@
 #!/bin/bash
 
-#title           :linux-privesc.sh
-#description     :Shell script for Linux privilege escalation.
-#author		     :t0thkr1s
-#version         :1.0
-#usage		     :bash linux-privesc.sh
+# Script         : linux-enum.sh
+# Description    : Shell script for local enumeration on Linux.
+# Author         : Kristof Toth - https://github.com/t0thkr1s
+# Version        : 1.0
 
 system_information() {
 
