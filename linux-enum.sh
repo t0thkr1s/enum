@@ -5,29 +5,66 @@
 # Author         : Kristof Toth - https://github.com/t0thkr1s
 # Version        : 1.0
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+RST='\033[0m'
+
 system_information() {
 
-    proc_version=`cat /proc/version 2>/dev/null`
+    kernel=`cat /proc/version 2>/dev/null`
 
-    if [ "$proc_version" ]; then
-        echo -e "\e[00;31mKernel information:\e[00m\n$proc_version\n"
+    if [ "$kernel" ]; then
+        echo "${GREEN}[ + ] Kernel information:${RST}\n$kernel\n"
     else
-        # try running uname
         uname=`uname -a 2>/dev/null`
         if [ "$uname" ]; then
-            echo -e "\e[00;31mKernel information:\e[00m\n$uname\n"
+            echo "${GREEN}[ + ] Kernel information:${RST}\n$uname\n"
         fi
     fi
 
-    release=`cat /etc/*-release 2>/dev/null`
+    release=`cat /etc/*-release 2>/dev/null | grep DISTRIB`
     if [ "$release" ]; then
-        echo -e "\e[00;31mRelease information:\e[00m\n$release\n"
+        echo "${GREEN}[ + ] Distribution information:${RST}\n$release\n"
+    fi
+
+}
+
+user_information() {
+
+    user_information=`id 2>/dev/null`
+    if [ "$user_information" ]; then
+        echo "${GREEN}[ + ] Current user & group information:${RST}\n$user_information\n" 
+    fi
+
+    previously_logged_in_users=`lastlog 2>/dev/null | grep -v "Never" 2>/dev/null`
+    if [ "$previously_logged_in_users" ]; then
+        echo "${GREEN}[ + ] Previously logged in users:${RST}\n$previously_logged_in_users\n"
+    fi
+
+    currently_logged_in_users=`w 2>/dev/null`
+    if [ "$currently_logged_in_users" ]; then
+        echo "${GREEN}[ + ] Currently logged in users:\e[00m\n$currently_logged_in_users\n"
+    fi
+    
+    passwd_file=`cat /etc/passwd 2>/dev/null`
+    if [ "$passwd_file" ]; then
+        echo "${GREEN}[ + ] Contents of /etc/passwd:${RST}\n$passwd_file\n"
+    else
+        echo "${RED}[ - ] The /etc/passwd file is not readable!\n"
+    fi
+
+    shadow_file=`cat /etc/shadow 2>/dev/null`
+    if [ "$shadow_file" ]; then
+        echo "${GREEN}[ + ] Contents of /etc/shadow:${RST}\n$shadow_file\n"
+    else
+        echo "${RED}[ - ] The /etc/shadow file is not readable!\n"
     fi
 
 }
 
 main() {
     system_information
+    user_information
 }
 
 main
