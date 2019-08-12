@@ -22,9 +22,14 @@ system_information() {
         fi
     fi
 
-    release=`cat /etc/*-release 2>/dev/null | grep DISTRIB`
+    release=`cat /etc/*-release | grep DISTRIB 2>/dev/null`
     if [ "$release" ]; then
         echo "${GREEN}[ + ] Distribution information:${RST}\n$release\n"
+    fi
+    
+    glibc_version=`ldd --version | head -n 1 2>/dev/null`
+    if [ "$glibc_version" ]; then
+        echo "${GREEN}[ + ] GNU C library information:${RST}\n$glibc_version\n"
     fi
 
 }
