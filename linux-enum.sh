@@ -65,11 +65,86 @@ user_information() {
         echo -e "${RED}[ - ] The /etc/shadow file is not readable!\n"
     fi
 
+    root_directory_permissions=`ls -ahl /root/ 2>/dev/null`
+    if [ "$root_directory_permissions" ]; then
+        echo -e "${GREEN}[ + ] The /root directory is readable!${RST}\n$root_directory_permissions\n"
+    fi
+
+    home_directory_permissions=`ls -ahl /home/ 2>/dev/null`
+    if [ "$home_directory_permissions" ]; then
+        echo -e "${GREEN}[ + ] Home directory permissions:${RST}\n$home_directory_permissions\n" 
+    fi
+
+}
+
+environmental_information() {
+
+    enviroment_variables=`env 2>/dev/null | grep -v 'LS_COLORS' 2>/dev/null`
+    if [ "$enviroment_variables" ]; then
+        echo -e "${GREEN}[ + ] Environment information:${RST}\n$enviroment_variables\n"
+    fi
+
+    selinux_status=`sestatus 2>/dev/null`
+    if [ "$selinux_status" ]; then
+        echo -e "${GREEN}[ + ] SELinux seems to be present:${RST}\n$selinux_status\n"
+    fi
+
+    available_shells=`tail -n +2 /etc/shells 2>/dev/null`
+    if [ "$available_shells" ]; then
+        echo -e "${GREEN}[ + ] Available shells:${RST}\n$available_shells\n"
+    fi
+
+}
+
+service_information() {
+    
+    running_processes=`ps aux 2>/dev/null`
+    if [ "$running_processes" ]; then
+        echo -e "${GREEN}[ + ] Running processes:${RST}\n$running_processes\n"
+    fi
+
+}
+
+software_information() {
+
+    sudo_version=`sudo -V 2>/dev/null| grep "Sudo version" 2>/dev/null`
+    if [ "$sudo_version" ]; then
+        echo -e "${GREEN}[ + ] Sudo version:${RST}\n$sudo_version\n"
+    fi
+
+    mysql_version=`mysql --version 2>/dev/null`
+    if [ "$mysql_version" ]; then
+        echo -e "${GREEN}[ + ] Mysql version:${RST}\n$mysql_version\n"
+    fi
+
+    mysql_default=`mysqladmin -uroot -proot version 2>/dev/null`
+    if [ "$mysql_default" ]; then
+        echo -e "${GREEN}[ + ] We can connect with the default (root:root) credentials!${RST}\n$mysql_default\n"
+    fi
+
+    mysql_nopassword=`mysqladmin -uroot version 2>/dev/null`
+    if [ "$mysql_nopassword" ]; then
+        echo -e "${GREEN}[ + ] We can connect as 'root' without a password!${RST}\n$mysql_nopassword\n"
+    fi
+
+    postgres_version=`psql -V 2>/dev/null`
+    if [ "$postgres_version" ]; then
+        echo -e "${GREEN}[ + ] Postgres version:${RST}\n$postgres_version\n"
+    fi
+    
+    apache_version=`apache2 -v 2>/dev/null; httpd -v 2>/dev/null`
+    if [ "$apache_version" ]; then
+        echo -e "${GREEN}[ + ] Apache version:${RST}\n$apache_version\n" 
+    fi
+
 }
 
 main() {
     system_information
     user_information
+    environmental_information
+    service_information
+    software_information
 }
 
 main
