@@ -1,4 +1,4 @@
-:: Script       : windows-privesc.bat
+:: Script       : windows-enum.bat
 :: Description  : Batch script for local enumeration on Windows.
 :: Author:      : Kristof Toth - https://github.com/t0thkr1s
 :: Version      : 1.0
