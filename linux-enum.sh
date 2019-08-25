@@ -139,12 +139,52 @@ software_information() {
 
 }
 
+file_information() {
+
+    suid_files=`find / -perm -4000 -type f -exec ls -la {} 2>/dev/null \;`
+    if [ "$suid_files" ]; then
+        echo -e "${GREEN}[ + ] SUID files:${RST}\n$suid_files\n"
+    fi
+
+    ssh_keys=`grep -rl "PRIVATE KEY-----" /home 2>/dev/null`
+	if [ "$ssh_keys" ]; then
+  		echo -e "${GREEN}[ + ] Private SSH keys found:${RST}\n$ssh_keys\n"
+	fi
+
+    aws_keys=`grep -rli "aws_secret_access_key" /home 2>/dev/null`
+	if [ "$aws_keys" ]; then
+  		echo -e "${GREEN}[ + ] AWS secret access keys found:${RST}\n$aws_keys\n"
+	fi
+
+    git_credentials=`find / -name ".git-credentials" 2>/dev/null`
+	if [ "$git_credentials" ]; then
+  		echo -e "${GREEN}[ + ] Git credentials found:${RST}\n$git_credentials\n"
+	fi
+
+}
+
+container_information() {
+    
+    docker_container=` grep -i docker /proc/self/cgroup  2>/dev/null; find / -name "*dockerenv*" -exec ls -la {} \; 2>/dev/null`
+    if [ "$docker_container" ]; then
+        echo -e "${GREEN}[ + ] Looks like we are in a Docker container:${RST}\n$docker_container\n"
+    fi
+
+    lxc_container=`grep -qa container=lxc /proc/1/environ 2>/dev/null`
+    if [ "$lxc_container" ]; then
+        echo -e "${GREEN}[ + ] Looks like we are in a LXC container:${RST}\n$lxc_container\n"
+    fi
+
+}
+
 main() {
     system_information
     user_information
     environmental_information
     service_information
     software_information
+    file_information
+    container_information
 }
 
 main
