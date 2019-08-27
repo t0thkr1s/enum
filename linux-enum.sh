@@ -147,20 +147,25 @@ file_information() {
     fi
 
     ssh_keys=`grep -rl "PRIVATE KEY-----" /home 2>/dev/null`
-	if [ "$ssh_keys" ]; then
-  		echo -e "${GREEN}[ + ] Private SSH keys found:${RST}\n$ssh_keys\n"
-	fi
+    if [ "$ssh_keys" ]; then
+  	echo -e "${GREEN}[ + ] Private SSH keys found:${RST}\n$ssh_keys\n"
+    fi
 
     aws_keys=`grep -rli "aws_secret_access_key" /home 2>/dev/null`
-	if [ "$aws_keys" ]; then
-  		echo -e "${GREEN}[ + ] AWS secret access keys found:${RST}\n$aws_keys\n"
-	fi
+    if [ "$aws_keys" ]; then
+  	echo -e "${GREEN}[ + ] AWS secret access keys found:${RST}\n$aws_keys\n"
+    fi
 
     git_credentials=`find / -name ".git-credentials" 2>/dev/null`
-	if [ "$git_credentials" ]; then
-  		echo -e "${GREEN}[ + ] Git credentials found:${RST}\n$git_credentials\n"
-	fi
+    if [ "$git_credentials" ]; then
+  	echo -e "${GREEN}[ + ] Git credentials found:${RST}\n$git_credentials\n"
+    fi
 
+    mails=`ls -la /var/mail 2>/dev/null`
+    if [ "$mails" ]; then
+	echo -e "${GREEN}[ + ] Listing mails in /var/mail:${RST}\n$mails\n"
+    fi
+    
 }
 
 container_information() {
