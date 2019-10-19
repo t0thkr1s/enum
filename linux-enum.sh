@@ -26,11 +26,6 @@ system_information() {
     if [ "$release" ]; then
         echo -e "${GREEN}[ + ] Distribution information:${RST}\n$release\n"
     fi
-    
-    glibc_version=`ldd --version | head -n 1 2>/dev/null`
-    if [ "$glibc_version" ]; then
-        echo -e "${GREEN}[ + ] GNU C library information:${RST}\n$glibc_version\n"
-    fi
 
 }
 
@@ -106,6 +101,11 @@ service_information() {
 }
 
 software_information() {
+
+    glibc_version=`ldd --version | head -n 1 2>/dev/null`
+    if [ "$glibc_version" ]; then
+        echo -e "${GREEN}[ + ] GNU C library information:${RST}\n$glibc_version\n"
+    fi
 
     sudo_version=`sudo -V 2>/dev/null| grep "Sudo version" 2>/dev/null`
     if [ "$sudo_version" ]; then
