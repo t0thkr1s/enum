@@ -6,8 +6,8 @@ jobs:
   build:
 
     runs-on: windows-latest
-    
+
     steps:
-    - uses: actions/checkout@v1
-    - name: Running the batch script
-      run: ./windows-enum.bat
+      - uses: actions/checkout@v1
+      - name: Running the batch script
+        run: ./windows-enum.bat

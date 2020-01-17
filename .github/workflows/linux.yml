@@ -6,8 +6,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v1
-    - name: Running the shell script
-      run: ./linux-enum.sh
+      - uses: actions/checkout@v1
+      - name: Running the shell script
+        run: ./linux-enum.sh
