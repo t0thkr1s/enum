@@ -140,6 +140,11 @@ software_information() {
         echo -e "${GREEN}[ + ] Apache version:${RST}\n$apache_version\n"
     fi
 
+    useful_software=$(command -v nmap aws nc ncat netcat nc.traditional wget curl ping gcc g++ make gdb base64 socat python python2 python3 python2.7 python2.6 python3.6 python3.7 perl php ruby xterm doas sudo fetch 2>/dev/null)
+    if [ "$useful_software" ]; then
+        echo -e "${GREEN}[ + ] Useful software:${RST}\n$useful_software\n"
+    fi
+
 }
 
 file_information() {
@@ -172,6 +177,21 @@ file_information() {
     mails=$(ls -la /var/mail 2>/dev/null)
     if [ "$mails" ]; then
         echo -e "${GREEN}[ + ] Listing mails in /var/mail:${RST}\n$mails\n"
+    fi
+
+    gpg_keys=$(gpg --list-keys 2>/dev/null)
+    if [ "$gpg_keys" ]; then
+        echo -e "${GREEN}[ + ] GPG keys:${RST}\n$gpg_keys\n"
+    fi
+
+    ovpn_files=$(find / -name "*.ovpn" 2>/dev/null)
+    if [ "$ovpn_files" ]; then
+        echo -e "${GREEN}[ + ] OVPN files:${RST}\n$ovpn_files\n"
+    fi
+
+    vnc_directories=$(find /home / -type d -name .vnc 2>/dev/null)
+    if [ "$vnc_directories" ]; then
+        echo -e "${GREEN}[ + ] VNC directories:${RST}\n$vnc_directories\n"
     fi
 
 }
