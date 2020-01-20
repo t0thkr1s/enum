@@ -5,7 +5,6 @@
 # Author         : @t0thkr1s
 # Version        : 1.0
 
-RED='\033[0;31m'
 GREEN='\033[0;32m'
 RST='\033[0m'
 
@@ -49,15 +48,16 @@ user_information() {
     passwd_file=$(cat /etc/passwd 2>/dev/null)
     if [ "$passwd_file" ]; then
         echo -e "${GREEN}[ + ] Contents of /etc/passwd:${RST}\n$passwd_file\n"
-    else
-        echo -e "${RED}[ - ] The /etc/passwd file is not readable!\n"
     fi
 
     shadow_file=$(cat /etc/shadow 2>/dev/null)
     if [ "$shadow_file" ]; then
         echo -e "${GREEN}[ + ] Contents of /etc/shadow:${RST}\n$shadow_file\n"
-    else
-        echo -e "${RED}[ - ] The /etc/shadow file is not readable!\n"
+    fi
+
+    sudoers_file=$(grep -v -e '^$' /etc/sudoers 2>/dev/null | grep -v "#" 2>/dev/null)
+    if [ "$sudoers_file" ]; then
+        echo -e "${GREEN}[ + ] Contents of /etc/sudoers:${RST}\n$sudoers_file\n"
     fi
 
     root_directory_permissions=$(ls -ahl /root/ 2>/dev/null)
@@ -68,6 +68,11 @@ user_information() {
     home_directory_permissions=$(ls -ahl /home/ 2>/dev/null)
     if [ "$home_directory_permissions" ]; then
         echo -e "${GREEN}[ + ] Home directory permissions:${RST}\n$home_directory_permissions\n"
+    fi
+
+    sudo_without_password=$(echo '' | sudo -S -l -k 2>/dev/null)
+    if [ "$sudo_without_password" ]; then
+        echo -e "${GREEN}[ + ] We can sudo without a password!!!:${RST}\n"
     fi
 
 }
