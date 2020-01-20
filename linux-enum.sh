@@ -15,6 +15,11 @@ banner="""
 header="\n\e[1;97m---------- [ \e[1;96m %s \e[1;97m ] ----------\e[0m\n\n"
 marker="\e[1;97m[ \e[1;92m+ \e[1;97m] %s \e[0m"
 
+print_banner() {
+    printf "\033c"
+    printf "$banner"
+}
+
 system_information() {
 
     kernel=$(cat /proc/version 2>/dev/null)
@@ -214,7 +219,7 @@ file_information() {
         echo "$ovpn_files"
     fi
 
-    vnc_directories=$(find / -type d -name .vnc 2>/dev/null)
+    vnc_directories=$(find / -type d -name ".vnc" 2>/dev/null)
     if [ "$vnc_directories" ]; then
         printf "${header}" "VNC DIRECTORIES"
         echo "$vnc_directories"
@@ -240,8 +245,7 @@ container_information() {
 }
 
 main() {
-    printf "\033c"
-    printf "$banner"
+    print_banner
     system_information
     user_information
     environmental_information
