@@ -189,6 +189,12 @@ file_information() {
         echo "$suid_files"
     fi
 
+    sensitive_files=$(ls -la /etc/passwd 2>/dev/null ; ls -la /etc/group 2>/dev/null ; ls -la /etc/profile 2>/dev/null; ls -la /etc/shadow 2>/dev/null ; ls -la /etc/master.passwd 2>/dev/null)
+    if [ "$sensitive_files" ]; then
+        printf "${header}" "SENSITIVE FILES"
+        echo "$sensitive_files"
+    fi
+
     git_credentials=$(find / -name ".git-credentials" 2>/dev/null)
     if [ "$git_credentials" ]; then
         printf "${header}" "GIT CREDENTIALS"
