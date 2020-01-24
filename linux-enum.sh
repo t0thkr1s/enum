@@ -189,7 +189,13 @@ file_information() {
         echo "$suid_files"
     fi
 
-    sensitive_files=$(ls -la /etc/passwd 2>/dev/null ; ls -la /etc/group 2>/dev/null ; ls -la /etc/profile 2>/dev/null; ls -la /etc/shadow 2>/dev/null ; ls -la /etc/master.passwd 2>/dev/null)
+    sensitive_files=$(
+        ls -la /etc/passwd 2>/dev/null
+        ls -la /etc/group 2>/dev/null
+        ls -la /etc/profile 2>/dev/null
+        ls -la /etc/shadow 2>/dev/null
+        ls -la /etc/master.passwd 2>/dev/null
+    )
     if [ "$sensitive_files" ]; then
         printf "${header}" "SENSITIVE FILES"
         echo "$sensitive_files"
