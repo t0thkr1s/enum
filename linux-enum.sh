@@ -13,7 +13,7 @@ banner="""
 """
 
 header="\n\e[1;97m---------- [ \e[1;96m %s \e[1;97m ] ----------\e[0m\n\n"
-marker="\e[1;97m[ \e[1;92m+ \e[1;97m] %s \e[0m"
+marker="\n\e[1;97m[ \e[1;92m+ \e[1;97m] %s \e[0m\n"
 
 print_banner() {
     printf "\033c"
@@ -110,6 +110,11 @@ environmental_information() {
         printf "$marker" "SELinux seems to be present!"
     fi
 
+    aslr=$(cat /proc/sys/kernel/randomize_va_space 2>/dev/null)
+    if [ "$aslr" -eq "0" ]; then 
+        printf "$marker" "ASLR seems to be disabled!"
+    fi
+
     available_shells=$(tail -n +2 /etc/shells 2>/dev/null)
     if [ "$available_shells" ]; then
         printf "${header}" "AVAILABLE SHELLS"
@@ -173,10 +178,16 @@ software_information() {
         echo "$apache_version"
     fi
 
-    useful_software=$(command -v nmap aws nc ncat netcat nc.traditional wget curl ping gcc g++ make gdb base64 socat python python2 python3 python2.7 python2.6 python3.6 python3.7 perl php ruby xterm doas sudo fetch 2>/dev/null)
+    useful_software=$(command -v nmap aws nc ncat netcat nc.traditional wget curl ping gcc g++ make gdb base64 socat python python2 python3 python2.7 python2.6 python3.6 python3.7 perl php ruby xterm doas sudo fetch docker 2>/dev/null)
     if [ "$useful_software" ]; then
         printf "${header}" "USEFUL SOFTWARE"
         echo "$useful_software"
+    fi
+
+    compilers=$(dpkg --list 2>/dev/null | grep "compiler" | grep -v "decompiler\|lib" 2>/dev/null || yum list installed 'gcc*' 2>/dev/null | grep gcc 2>/dev/null; which gcc g++ 2>/dev/null || locate -r "/gcc[0-9\.-]\+$" 2>/dev/null | grep -v "/doc/")
+    if [ "$compilers" ]; then
+        printf "${header}" "COMPILERS"
+        echo "$compilers"
     fi
 
 }
